@@ -1,0 +1,56 @@
+{
+  "name": "Argent X - Starknet Wallet",
+  "description": "7 out of 10 Starknet users choose Argent X as their Starknet wallet. Join 2m+ Argent users now.",
+  "version": "5.14.4",
+  "manifest_version": 3,
+  "action": {
+    "default_icon": {
+      "16": "assets/logo.png",
+      "48": "assets/logo.png",
+      "128": "assets/logo.png"
+    },
+    "default_title": "Argent X",
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "alarms",
+    "tabs",
+    "storage",
+    "unlimitedStorage",
+    "notifications"
+  ],
+  "host_permissions": [
+    "http://localhost/*",
+    "https://alpha4.starknet.io/*",
+    "https://alpha4-2.starknet.io/*",
+    "https://alpha-mainnet.starknet.io/*",
+    "https://external.integration.starknet.io/*",
+    "https://healthcheck.argent.xyz/*",
+    "https://cloud.argent-api.com/*"
+  ],
+  "icons": {
+    "16": "assets/logo.png",
+    "48": "assets/logo.png",
+    "128": "assets/logo.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["inject.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": ["<all_urls>"],
+      "resources": ["inpage.js"]
+    }
+  ]
+}
