@@ -3,13 +3,13 @@ import requests
 
 app = Flask(__name__)
 
-INFURA_URL = 'https://starknet-sepolia.public.blastapi.io/'  # Replace with the actual Infura RPC URL
+INFURA_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7'
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def mirror_request(path):
     try:
-        # Construct the Infura URL
+        # Construct URL
         url = f"{INFURA_URL}{path}"
 
         # Log the incoming request
@@ -20,10 +20,10 @@ def mirror_request(path):
         print('Request body:', request.json)
         print("\n---------------------------------------------------------------------")
 
-        # Prepare the data and headers for forwarding
-        data = request.get_json(force=True, silent=True)  # Ensures the JSON payload is parsed
+        # Prepare data and headers for forwarding
+        data = request.get_json(force=True, silent=True)
         headers = {key: value for key, value in request.headers if key.lower() != 'host'}
-        # Forward the request to Infura
+        # Forward request
         response = requests.request(
             method=request.method,
             url=url,
@@ -31,12 +31,12 @@ def mirror_request(path):
             json=data
         )
 
-        # Log the response from Infura
+        # Log response
         print('Response status:', response.status_code)
         print('Response body:', response.json())
 
         print("\n=====================================================================")
-        # Return the response from Infura
+        # Return response
         return jsonify(response.json()), response.status_code
 
     except requests.exceptions.RequestException as e:
