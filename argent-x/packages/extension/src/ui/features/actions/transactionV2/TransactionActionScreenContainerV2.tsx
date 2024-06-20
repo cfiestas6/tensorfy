@@ -12,7 +12,9 @@ import {
   Accordion,
   AccordionButton,
   AccordionItem,
+  AccordionItemProps,
   AccordionPanel,
+  AccordionPanelProps,
   Divider,
   Flex,
   useDisclosure,
@@ -22,7 +24,7 @@ import { useAtom } from "jotai"
 import { isEmpty, isObject } from "lodash-es"
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { z } from "zod"
+import { string, z } from "zod"
 
 import { isTransactionActionItem } from "../../../../shared/actionQueue/types"
 import { getMessageFromTrpcError } from "../../../../shared/errors/schema"
@@ -72,6 +74,7 @@ import { getPrettyRpcError } from "./utils/getPrettyRpcError"
 import { ActionScreenErrorFooter } from "../transaction/ApproveTransactionScreen/ActionScreenErrorFooter"
 import { AccordionIconDropdown, P4 } from "@argent/x-ui"
 import { ActionContainer } from "../../../components/ErrorBoundaryFallbackWithCopyError"
+import ExplAInation from "./ExplAInation"
 
 export interface TransactionActionScreenContainerV2Props
   extends ConfirmScreenProps {
@@ -112,6 +115,7 @@ export const TransactionActionScreenContainerV2: FC<
   const [isFeeTokenPickerOpen, setIsFeeTokenPickerOpen] = useState(false)
   const rejectDeployIfPresent = useRejectDeployIfPresent()
   const feeTokePickerRef = useRef<HTMLDivElement>(null)
+  const explAInedRef = useRef<AccordionPanelProps>(null)
 
   const feeTokens = useFeeTokenBalances(selectedAccount)
 
@@ -522,7 +526,21 @@ export const TransactionActionScreenContainerV2: FC<
         {transactionReviewSimulation}
         {transactionReviewActions}
 
-        {/* Here is the field that shows the raw tx. */}
+        {/* This is the field that shows the tx explained. */}
+        <Accordion colorScheme="neutrals" size="sm" allowToggle>
+          <AccordionItem>
+            <AccordionButton justifyContent="space-between">
+              <Flex alignItems={"center"}>
+                <P4 fontWeight="semibold" mr={1}>
+                  Transaction explAIned
+                </P4>
+                <AccordionIconDropdown />
+              </Flex>
+            </AccordionButton>
+            <ExplAInation />
+          </AccordionItem>
+        </Accordion>
+        {/* This is the field that shows the raw tx. */}
         <Accordion colorScheme="neutrals" size="sm" allowToggle>
           <AccordionItem>
             <AccordionButton justifyContent="space-between">
