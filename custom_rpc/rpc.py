@@ -13,6 +13,7 @@ def mirror_request(path):
         # Construct URL
         url = f"{INFURA_URL}{path}"
 
+
         # Log the incoming request
         print("\n=====================================================================")
         print("---------------------------------------------------------------------")
@@ -24,6 +25,11 @@ def mirror_request(path):
         # Prepare data and headers for forwarding
         data = request.get_json(force=True, silent=True)
         headers = {key: value for key, value in request.headers if key.lower() != 'host'}
+
+        if data.method == 'starknet_addInvokeTransaction':
+            # CUSTOM LOGIC
+            pass
+
         # Forward request
         response = requests.request(
             method=request.method,

@@ -19,7 +19,6 @@ account = Account(
     chain=StarknetChainId.SEPOLIA,
 ) 
 
-
 async def simulate_transaction(account):
     contract = await Contract.from_address(provider=account, address="0x079b587c6e75cb38b210fc12e37662c9f518d0025b7e67ac82c080501a105937")
 
