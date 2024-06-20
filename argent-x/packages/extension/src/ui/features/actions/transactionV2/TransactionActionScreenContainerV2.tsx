@@ -71,6 +71,7 @@ import { parseTransferTokenCall } from "./utils/parseTransferTokenCall"
 import { getPrettyRpcError } from "./utils/getPrettyRpcError"
 import { ActionScreenErrorFooter } from "../transaction/ApproveTransactionScreen/ActionScreenErrorFooter"
 import { AccordionIconDropdown, P4 } from "@argent/x-ui"
+import { ActionContainer } from "../../../components/ErrorBoundaryFallbackWithCopyError"
 
 export interface TransactionActionScreenContainerV2Props
   extends ConfirmScreenProps {
@@ -478,6 +479,15 @@ export const TransactionActionScreenContainerV2: FC<
   const confirmButtonText =
     hasInsufficientFunds && !userClickedAddFunds ? "Add funds" : "Confirm"
 
+  const txPayload = {
+    tx: Array.isArray(action.payload.transactions)
+      ? action.payload.transactions[0]
+      : action.payload.transactions,
+    abi: Array.isArray(action.payload.abis)
+      ? action.payload.abis[0]
+      : action.payload.abis,
+  }
+
   return (
     <WithArgentShieldVerified transactions={action.payload.transactions}>
       <ConfirmScreen
@@ -523,8 +533,22 @@ export const TransactionActionScreenContainerV2: FC<
                 <AccordionIconDropdown />
               </Flex>
             </AccordionButton>
-            <AccordionPanel>FSCK MY LIFE, DUDE</AccordionPanel>
-            <AccordionPanel>IS THIS WORKING AS EXPECTED?</AccordionPanel>
+            <AccordionPanel>Type: {JSON.stringify(action.type)}</AccordionPanel>
+            <AccordionPanel>
+              Calldata: {JSON.stringify(txPayload.tx.calldata)}
+            </AccordionPanel>
+            <AccordionPanel>
+              Contract: {JSON.stringify(txPayload.tx.contractAddress)}
+            </AccordionPanel>
+            <AccordionPanel>
+              Entrypoint: {JSON.stringify(txPayload.tx.entrypoint)}
+            </AccordionPanel>
+            <AccordionPanel>
+              TxDetail:{JSON.stringify(action.payload.transactionsDetail)}
+            </AccordionPanel>
+            <AccordionPanel>
+              Created: {JSON.stringify(action.payload.createdAt)}
+            </AccordionPanel>
           </AccordionItem>
         </Accordion>
         {loadingOrErrorState}
