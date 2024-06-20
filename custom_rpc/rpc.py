@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 INFURA_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7'
 
+
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def mirror_request(path):
@@ -44,6 +45,11 @@ def mirror_request(path):
         print('Error forwarding request to Infura:', e)
         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         return jsonify({'error': 'Internal Server Error'}), 500
+
+# Simulate tx sending data to another RPC and send output of the transaction to LLM pipe
+def simulate_and_send():
+    pass
+
 
 if __name__ == '__main__':
     app.run(port=3000)
