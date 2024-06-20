@@ -9,7 +9,7 @@ import asyncio
 import json
 import pandas as pd
 
-#Used contract deployed by us in te past for testing the tx simulation
+# Used contract deployed by us in te past for testing the tx simulation
 
 client = FullNodeClient(node_url="https://starknet-sepolia.public.blastapi.io/rpc/v0_7")
 account = Account(
