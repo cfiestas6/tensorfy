@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-INFURA_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7'
+INFURA_URL = 'https://starknet-sepolia.public.blastapi.io/'
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -18,7 +18,7 @@ def mirror_request(path):
         print("\n=====================================================================")
         print("---------------------------------------------------------------------")
         print(f"Received {request.method} request to {request.path}")
-        print('Request headers:', dict(request.headers))
+        print('Request headers:', str(dict(request.headers)) + "\n")
         print('Request body:', request.json)
         print("\n---------------------------------------------------------------------")
 
@@ -53,7 +53,7 @@ def mirror_request(path):
         return jsonify({'error': 'Internal Server Error'}), 500
 
 # Simulate tx sending data to another RPC and send output of the transaction to LLM pipe
-def simulate_and_send():
+def simulate_transaction():
     pass
 
 
