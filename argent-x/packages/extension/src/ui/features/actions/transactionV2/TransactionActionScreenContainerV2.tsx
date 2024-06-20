@@ -115,7 +115,6 @@ export const TransactionActionScreenContainerV2: FC<
   const [isFeeTokenPickerOpen, setIsFeeTokenPickerOpen] = useState(false)
   const rejectDeployIfPresent = useRejectDeployIfPresent()
   const feeTokePickerRef = useRef<HTMLDivElement>(null)
-  const explAInedRef = useRef<AccordionPanelProps>(null)
 
   const feeTokens = useFeeTokenBalances(selectedAccount)
 
