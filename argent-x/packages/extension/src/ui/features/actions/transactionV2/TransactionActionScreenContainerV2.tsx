@@ -8,7 +8,15 @@ import {
   prettifyTokenNumber,
   transferCalldataSchema,
 } from "@argent/x-shared"
-import { Divider, useDisclosure } from "@chakra-ui/react"
+import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  Divider,
+  Flex,
+  useDisclosure,
+} from "@chakra-ui/react"
 import { formatUnits } from "ethers"
 import { useAtom } from "jotai"
 import { isEmpty, isObject } from "lodash-es"
@@ -62,6 +70,7 @@ import { useTransactionReviewV2 } from "./useTransactionReviewV2"
 import { parseTransferTokenCall } from "./utils/parseTransferTokenCall"
 import { getPrettyRpcError } from "./utils/getPrettyRpcError"
 import { ActionScreenErrorFooter } from "../transaction/ApproveTransactionScreen/ActionScreenErrorFooter"
+import { AccordionIconDropdown, P4 } from "@argent/x-ui"
 
 export interface TransactionActionScreenContainerV2Props
   extends ConfirmScreenProps {
@@ -502,6 +511,22 @@ export const TransactionActionScreenContainerV2: FC<
         {transactionReviewWarnings}
         {transactionReviewSimulation}
         {transactionReviewActions}
+
+        {/* Here is the field that shows the raw tx. */}
+        <Accordion colorScheme="neutrals" size="sm" allowToggle>
+          <AccordionItem>
+            <AccordionButton justifyContent="space-between">
+              <Flex alignItems={"center"}>
+                <P4 fontWeight="semibold" mr={1}>
+                  Raw transaction
+                </P4>
+                <AccordionIconDropdown />
+              </Flex>
+            </AccordionButton>
+            <AccordionPanel>FSCK MY LIFE, DUDE</AccordionPanel>
+            <AccordionPanel>IS THIS WORKING AS EXPECTED?</AccordionPanel>
+          </AccordionItem>
+        </Accordion>
         {loadingOrErrorState}
       </ConfirmScreen>
       <ConfirmationModal
