@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-INFURA_URL = 'https://starknet-sepolia.public.blastapi.io/'
+RPC_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7'
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -12,7 +12,7 @@ INFURA_URL = 'https://starknet-sepolia.public.blastapi.io/'
 def mirror_request(path):
     try:
         # Construct URL
-        url = f"{INFURA_URL}{path}"
+        url = f"{RPC_URL}{path}"
 
 
         # Log the incoming request
@@ -27,38 +27,41 @@ def mirror_request(path):
         data = request.get_json(force=True, silent=True)
         headers = {key: value for key, value in request.headers if key.lower() != 'host'}
 
-        # ERROR: data.get
-        if data and isinstance(data, list) and data.get('method') == 'starknet_addInvokeTransaction':
-            transaction_data = data.get('params', {}).get('invoke_transaction', {})
+        if data and isinstance(data, list):
+            for item in data:
+                if item.get('method') == 'starknet_addInvokeTransaction':
+                    transaction_data = item.get('params', {}).get('invoke_transaction', {})
 
-            payload = {
-                    "jsonrpc": "2.0",
-                    "method": "starknet_simulateTransaction",
-                    "params": {
-                        "transactions": {
-                            "to": transaction_data.get('sender_address'),
-                            "data": transaction_data.get('calldata'),
-                            "nonce": transaction_data.get('nonce'),
-                            "signature": transaction_data.get('signature'),
-                        }
-                    },
-                    "block_id": "latest",
-                    "simulation_flags": ["SKIP_EXECUTE"]
-            }
+                    payload = {
+                            "jsonrpc": "2.0",
+                            "method": "starknet_simulateTransaction",
+                            "params": {
+                                "transactions": {
+                                    "to": transaction_data.get('sender_address'),
+                                    "data": transaction_data.get('calldata'),
+                                    "nonce": transaction_data.get('nonce'),
+                                    "signature": transaction_data.get('signature'),
+                                }
+                            },
+                            "block_id": "pending",
+                            "simulation_flags": ["SKIP_EXECUTE"]
+                    }
 
-            simulate_response = requests.request(
-                    method='POST',
-                    url=url,
-                    headers={"Content-Type: application/json"},
-                    json=jsonify(payload)
-            )
+                    print("\n\nPayload for simulation: ", payload + "\n\n")
 
-            print("= = = = = = = = = = = = = = = ")
-            print("SIMULATE RESPONSE:")
-            print(simulate_response.status_code)
-            print(simulate_response.json())
-            print("= = = = = = = = = = = = = = = ")
-            return jsonify(simulate_response.json()), simulate_response.status_code
+                    simulate_response = requests.request(
+                            method='POST',
+                            url=url,
+                            headers={"Content-Type: application/json"},
+                            json=jsonify(payload)
+                    )
+
+                    print("= = = = = = = = = = = = = = = ")
+                    print("SIMULATE RESPONSE:")
+                    print(simulate_response.status_code)
+                    print(simulate_response.json())
+                    print("= = = = = = = = = = = = = = = ")
+                    return jsonify(simulate_response.json()), simulate_response.status_code
 
         # Forward request
         response = requests.request(
