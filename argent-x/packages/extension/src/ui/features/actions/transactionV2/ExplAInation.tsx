@@ -1,18 +1,26 @@
-import { AccordionPanel } from "@chakra-ui/react"
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react"
+
 import { useEffect, useState } from "react"
 
 const fetchExplAInation = async () => {
   try {
-    const response = await fetch(
-      "http://worldtimeapi.org/api/timezone/Europe/Madrid",
-    )
+    const response = await fetch("https://loripsum.net/api/3/medium/plaintext")
     if (!response.ok) {
       throw new Error("Communication error")
     }
-    console.log("PACO")
-    const data = await response.json()
-    console.log(data)
-    return data.datetime
+
+    const data = await response.text()
+    return data
   } catch (error) {
     console.error(error)
     throw error
@@ -34,10 +42,26 @@ const ExplAInation = () => {
       })
   }, [])
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
-    <AccordionPanel>
-      <p>{data}</p>
-    </AccordionPanel>
+    <>
+      <Button size="sm" onClick={onOpen}>
+        ExplAIn
+      </Button>
+
+      <Modal onClose={onClose} isOpen={isOpen} scrollBehavior="inside">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>ExplAInation</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>{data}</ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 

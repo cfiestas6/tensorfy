@@ -12,11 +12,10 @@ import {
   Accordion,
   AccordionButton,
   AccordionItem,
-  AccordionItemProps,
   AccordionPanel,
-  AccordionPanelProps,
   Divider,
   Flex,
+  Spacer,
   useDisclosure,
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers"
@@ -525,20 +524,6 @@ export const TransactionActionScreenContainerV2: FC<
         {transactionReviewSimulation}
         {transactionReviewActions}
 
-        {/* This is the field that shows the tx explained. */}
-        <Accordion colorScheme="neutrals" size="sm" allowToggle>
-          <AccordionItem>
-            <AccordionButton justifyContent="space-between">
-              <Flex alignItems={"center"}>
-                <P4 fontWeight="semibold" mr={1}>
-                  Transaction explAIned
-                </P4>
-                <AccordionIconDropdown />
-              </Flex>
-            </AccordionButton>
-            <ExplAInation />
-          </AccordionItem>
-        </Accordion>
         {/* This is the field that shows the raw tx. */}
         <Accordion colorScheme="neutrals" size="sm" allowToggle>
           <AccordionItem>
@@ -548,6 +533,9 @@ export const TransactionActionScreenContainerV2: FC<
                   Raw transaction
                 </P4>
                 <AccordionIconDropdown />
+                <Spacer />
+                {/* This is the field that shows the tx explained. */}
+                <ExplAInation />
               </Flex>
             </AccordionButton>
             <AccordionPanel>Type: {JSON.stringify(action.type)}</AccordionPanel>
@@ -568,6 +556,7 @@ export const TransactionActionScreenContainerV2: FC<
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
+
         {loadingOrErrorState}
       </ConfirmScreen>
       <ConfirmationModal
