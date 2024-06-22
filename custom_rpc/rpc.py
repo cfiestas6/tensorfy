@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 import requests
 import json
+from get_abi import get_abi
+import asyncio
+
 
 app = Flask(__name__)
 
 RPC_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7'
-
-def get_abi(contract):
-    
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -46,13 +46,19 @@ def mirror_request(path):
         else:
             if data.get("method") == "starknet_estimateFee":
                 print("Handling starknet_estimateFee")
+                sender_address = data['params']['request'][0]['sender_address']
+                abi = None
+                if sender_address:
+                    abi = asyncio.run(get_abi(sender_address))
+                
             response = requests.request(
                 method=request.method,
                 url=url,
                 headers=headers,
                 json=data
             )
-
+            
+            
 
             print('Response status:', response.status_code)
             print('Response body:', response.json())
