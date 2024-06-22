@@ -19,11 +19,10 @@ account = Account(
     chain=StarknetChainId.SEPOLIA,
 ) 
 
-async def simulate_transaction(account):
-    contract = await Contract.from_address(provider=account, address="0x079b587c6e75cb38b210fc12e37662c9f518d0025b7e67ac82c080501a105937")
+async def simulate_transaction(account, contract, calldata, selector):
+    contract = await Contract.from_address(provider=account, address=contract)
 
-    host = "https://api.ag"[:31]  
-    payload = "name=test"[:31]
+
 
     # Convert strings to int (felt) representation
     host_felt = int.from_bytes(host.encode(), "big")
@@ -32,23 +31,15 @@ async def simulate_transaction(account):
 
     call = Call(
         to_addr=contract.address,
-        selector=get_selector_from_name("create_call"),
-        calldata=[host_felt, payload_felt, method]
+        selector=selector,
+        calldata=calldata
+        invoke_tx = await account.sign_invoke_v1(calls=call, max_fee=int(1e16))
+        simulation_result = await client.simulate_transactions(transactions=[invoke_tx], block_number="latest")
+        print(simulation_result)
+        df = pd.DataFrame(simulation_result)
+        print(df.head(20))
+        print(contract.data.abi)
+        print(df)
+        df.to_json("out.json")
+        return df
     )
-
-    # Sign the transaction
-    invoke_tx = await account.sign_invoke_v1(calls=call, max_fee=int(1e16))
-
-    # Simulate the transaction
-    simulation_result = await client.simulate_transactions(transactions=[invoke_tx], block_number="latest")
-
-    # Print the simulation result
-    print(simulation_result)
-
-    df = pd.DataFrame(simulation_result)
-    print(df.head(20))
-    print(contract.data.abi)
-    print(df)
-    df.to_json("out.json")
-if __name__ == '__main__':
-    asyncio.run(simulate_transaction(account))
