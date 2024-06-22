@@ -8,7 +8,7 @@ from query_llm import llm_call, pre_promt
 
 app = Flask(__name__)
 
-RPC_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7'
+RPC_URL = 'https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.6'
 
 def hex_to_dec(hex_str):
     return int(hex_str, 16)
@@ -73,8 +73,8 @@ def mirror_request(path):
                     response_decimal = {
                         'gas_consumed': hex_to_dec(result['gas_consumed']),
                         'gas_price': hex_to_dec(result['gas_price']),
-                        'data_gas_consumed': hex_to_dec(result['data_gas_consumed']),
-                        'data_gas_price': hex_to_dec(result['data_gas_price']),
+                        #'data_gas_consumed': hex_to_dec(result['data_gas_consumed']),
+                        #'data_gas_price': hex_to_dec(result['data_gas_price']),
                         'overall_fee': hex_to_dec(result['overall_fee']),
                         'unit': result['unit']
                     }

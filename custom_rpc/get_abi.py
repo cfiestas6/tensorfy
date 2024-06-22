@@ -8,7 +8,7 @@ from starknet_py.utils.typed_data import get_selector_from_name
 import asyncio
 import json
 
-client = FullNodeClient(node_url="https://starknet-sepolia.public.blastapi.io/rpc/v0_7")
+client = FullNodeClient(node_url="https://starknet-sepolia.public.blastapi.io/rpc/v0_6")
 account = Account(
     client=client,
     address="0x010709063600056ceabc8be55e8b9be6e3dcf789bc84a3e56c01edb177826ee6",
