@@ -3,7 +3,7 @@ import requests
 import json
 from get_abi import get_abi
 import asyncio
-from query_llm import llm_call
+from query_llm import llm_call, pre_promt
 
 
 app = Flask(__name__)
@@ -23,14 +23,16 @@ def mirror_request(path):
         # Log the incoming request
         print(f"Received {request.method} request to {request.path}")
         print('Request body:', request.json)
-
+        
         # Prepare data and headers for forwarding
         data = request.get_json(force=True, silent=True)
         headers = {key: value for key, value in request.headers if key.lower() != 'host'}
         llm_query = []
 
         if isinstance(data, list):
+            
             responses = []
+            
             for item in data:
                 if 'method' in item and item['method'] == "starknet_estimateFee":
                     print("Handling starknet_estimateFee for an item in list")
@@ -41,7 +43,9 @@ def mirror_request(path):
                     json=item
                 )
                 responses.append(response.json())
+
             return jsonify(responses), 200  # Returns a list of responses
+
         else:
             if data.get("method") == "starknet_estimateFee":
                 print("Handling starknet_estimateFee")
@@ -51,6 +55,9 @@ def mirror_request(path):
                     abi = asyncio.run(get_abi(sender_address))
                 llm_query.append(abi)
                 
+                call_d = request.json
+                call_d = str(call_d['params']['request'][0]['calldata'])
+                print(call_d)
             response = requests.request(
                 method=request.method,
                 url=url,
@@ -73,7 +80,10 @@ def mirror_request(path):
                         'unit': result['unit']
                     }
                     print('Response in decimal:', response_decimal)
-                    llm_query.append(response_decimal)  # Append response_decimal to llm_query if it is defined
+                    llm_query.append(call_d)
+                    llm_query.append(response_decimal)
+                    llm_query.append(pre_promt)
+
             str_query = str(llm_query)
             call_sim = llm_call(str_query)
             print(call_sim)
@@ -89,9 +99,7 @@ def mirror_request(path):
             headers=headers,
             json=data
         )
-        #Call llm
-        call_sim = llm_call(query)
-        print(call_sim)
+
         ## Log response
         #print('Response status:', response.status_code)
         #print('Response body:', response.json())
