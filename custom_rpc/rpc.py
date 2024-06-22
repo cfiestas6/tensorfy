@@ -54,7 +54,7 @@ def mirror_request(path):
                 if sender_address:
                     abi = asyncio.run(get_abi(sender_address))
                 llm_query.append(abi)
-                
+
                 call_d = request.json
                 call_d = str(call_d['params']['request'][0]['calldata'])
                 print(call_d)
@@ -65,9 +65,8 @@ def mirror_request(path):
                 json=data
             )
             response_json = response.json()
-            
             response_decimal = None  # Initialize response_decimal
-            
+
             if 'result' in response_json and isinstance(response_json['result'], list):
                 result = response_json['result'][0]
                 if isinstance(result, dict):
@@ -90,7 +89,6 @@ def mirror_request(path):
             print('Response status:', response.status_code)
             print('Response body:', response.json())
             return jsonify(response.json()), response.status_code
-            
 
         # Forward request
         response = requests.request(
