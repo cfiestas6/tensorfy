@@ -1,5 +1,7 @@
 # Tensorfy
 #### Transactions made transparent.
+[Presentation link](https://www.canva.com/design/DAGI3cgJ7jY/eQ507YIfLRl4pPv2InV8Qw/edit?utm_content=DAGI3cgJ7jY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 Tensorfy is an innovative solution to current user experience, transparency and adoption problems within the Starknet ecosystem. Where fraud and scams are a main risk, Tensorfy resolves these issues by creating a transparent, secure, and user-friendly solution that helps users to efficiently understand and trust their transactions.
 
 
