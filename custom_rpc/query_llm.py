@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-OPENAI_API_KEY="sk-proj-"
+OPENAI_API_KEY="sk-proj"
 
 pre_promt = """This is an ABI, and simulated transaction in starknet network, your task is to provive a very brief summary explaining the results of the transaction execution for a non pro crypto user.
 checkcall data have to understand what functions and values are being called

@@ -1,8 +1,0 @@
-class hash: 0x29927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b
-fee token address: 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7
-multicall address: 0x05754af3760f3356da99aea5c3ec39ccac7783d925a19666ebbeca58ff0087f4
-block explorer URL: https://sepolia.starkscan.co
-rpc url: https://cloud.argent-api.com/v1/starknet/sepolia/rpc/v0.7
-internal ID: sepolia-alpha
-chain id: SN_SEPOLIA
-
